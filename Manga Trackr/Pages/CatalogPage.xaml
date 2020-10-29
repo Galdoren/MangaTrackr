@@ -1,0 +1,144 @@
+﻿<UserControl x:Class="Manga_Trackr.Pages.CatalogPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:c="clr-namespace:Manga.Converters;assembly=Manga.Converters"
+             xmlns:fr="clr-namespace:Manga.Framework;assembly=Manga.Framework"
+             xmlns:b="clr-namespace:Manga.Framework.Behaviors;assembly=Manga.Framework"
+             xmlns:i="clr-namespace:Manga.Interfaces;assembly=Manga.Interfaces"
+             xmlns:dbg="clr-namespace:System.Diagnostics;assembly=WindowsBase"
+             xmlns:local="clr-namespace:Manga_Trackr.ViewModels"
+             xmlns:metro="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"          
+             xmlns:System="clr-namespace:System;assembly=mscorlib"
+             mc:Ignorable="d" 
+             IsTabStop="False" x:Name="catalogPage1"
+             d:DesignHeight="300" d:DesignWidth="400">
+    <UserControl.DataContext>
+        <local:CatalogViewModel />
+    </UserControl.DataContext>
+    <UserControl.Resources>        
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary>
+                    <ResourceDictionary.MergedDictionaries>
+                        <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Colors.xaml" />
+                        <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
+                        <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
+                        <ResourceDictionary Source="pack://application:,,,/Resources/Icons.xaml" />
+                    </ResourceDictionary.MergedDictionaries>                                   
+                    
+                </ResourceDictionary>
+            </ResourceDictionary.MergedDictionaries>
+            
+            <c:FavouriteConverter x:Key="FavConverter" />
+            <FontFamily x:Key="myFont">Segoe UI, Lucida Sans Unicode, Verdana</FontFamily>
+
+            <ObjectDataProvider x:Key="dataFromEnum" MethodName="GetValues"
+                                    ObjectType="{x:Type System:Enum}">
+                <ObjectDataProvider.MethodParameters>
+                    <x:Type TypeName="i:Publisher"/>
+                </ObjectDataProvider.MethodParameters>
+            </ObjectDataProvider>
+        </ResourceDictionary>        
+    </UserControl.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        
+        <ComboBox Grid.Row="0" Height="20" Width="100" VerticalAlignment="Top" HorizontalAlignment="Left"
+                  Margin="10,15,0,0"
+                  ItemsSource="{Binding Source={StaticResource dataFromEnum}}"                  
+                  SelectedItem="{Binding Path=SelectedPublisher}">
+            <ComboBox.Style>
+                <Style TargetType="ComboBox" BasedOn="{StaticResource {x:Type ComboBox}}" />
+            </ComboBox.Style>
+        </ComboBox>
+
+        <TextBox Grid.Row="0" Width="210" Height="20" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,15,0,0"
+                 TextChanged="searchBox_TextChanged_1"
+                     Name="searchBox" metro:TextboxHelper.ClearTextButton="True" metro:TextboxHelper.Watermark="Search.."                     
+                 Text="{Binding SearchText, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}" KeyUp="TextBox_KeyUp_1">
+            <TextBox.Style>
+                <Style TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}" />
+            </TextBox.Style>
+        </TextBox>       
+        
+        <Rectangle Grid.Row="0"
+                   VerticalAlignment="Bottom"
+                   HorizontalAlignment="Stretch"
+                   Height="1"
+                   Fill="#FF546273" />
+        
+
+        <ListBox x:Name="listView1"
+                 Background="{DynamicResource ControlsBackgroundBrush}"
+                 Grid.Row="1"
+                 AlternationCount="2"
+                 BorderThickness="0"
+                 ItemsSource="{Binding ItemsSource.View}"
+                 HorizontalAlignment="Stretch"
+                 VerticalAlignment="Stretch"
+                 SelectedItem="{Binding SelectedItem, Mode=OneWayToSource}"
+                 MouseDoubleClick="ListView_MouseDoubleClick_1">
+            <ListBox.Resources>
+                <ContextMenu x:Key="myContextMenu">
+                    <MenuItem Header="Download"
+                                      Command="{Binding Path=DataContext.DownloadCommand,
+                                RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}" />
+                    <MenuItem Header="Read"
+                              Command="{Binding Path=DataContext.ReadCommand,
+                                RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}" />
+                    <MenuItem Header="Open in New Window" 
+                                      Command="{Binding Path=DataContext.OpenCommand,
+                                RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}" />
+                    <MenuItem Header="{Binding IsFavourite, Converter={StaticResource FavConverter}}"
+                                      Command="{Binding Path=DataContext.FavouriteCommand,
+                                RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}" />
+                </ContextMenu>
+            </ListBox.Resources>
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Grid Background="Transparent">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="20" />
+                            <RowDefinition Height="20" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="150" />
+                            <ColumnDefinition Width="50" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Text="{Binding Name}" b:FadeTrimming.IsEnabled="True" b:FadeTrimming.ShowTextInToolTipWhenTrimmed="True"
+                                   b:FadeTrimming.ToolTipStyle="{DynamicResource MetroToolTip}" ClipToBounds="True"
+                                   Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" FontFamily="{StaticResource myFont}" />
+                        <TextBlock Text="{Binding Author}" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" FontFamily="{StaticResource myFont}" />
+                        <Grid.Style>
+                            <Style TargetType="Grid">
+                                <Setter Property="ContextMenu" Value="{StaticResource myContextMenu}" />
+                            </Style>
+                        </Grid.Style>
+                    </Grid>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+            
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="{x:Type ListBoxItem}" BasedOn="{StaticResource {x:Type ListBoxItem}}">
+                    <Style.Triggers>
+                        <Trigger Property="ItemsControl.AlternationIndex" Value="1">
+                            <Setter Property="Background" Value="#FFF4F4F4" />
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </ListBox.ItemContainerStyle>
+            
+            <ListBox.Style>
+                <Style TargetType="ListBox" BasedOn="{StaticResource {x:Type ListBox}}" />
+            </ListBox.Style>
+        </ListBox>       
+        
+    </Grid>
+</UserControl>

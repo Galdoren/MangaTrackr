@@ -1,0 +1,67 @@
+﻿<metro:MetroWindow x:Class="Manga_Trackr.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:m="clr-namespace:Manga.Structures.Models;assembly=Manga.Structures"
+        xmlns:metro="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"        
+        TitleCaps="False"        
+        ShowTitleBar="False"
+        xmlns:local="clr-namespace:Manga_Trackr.ViewModels"        
+        Background="{DynamicResource ControlsBackgroundBrush}"
+        Icon="Resources/Uzumaki Naruto.ico"
+        MinWidth="520" MinHeight="300"
+        Title="Manga Tracker" Height="550" Width="545" Closing="MetroWindow_Closing_1" >
+    <metro:MetroWindow.GlowBrush>
+        <SolidColorBrush Color="{DynamicResource AccentColor}" />
+    </metro:MetroWindow.GlowBrush>
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Colors.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.AnimatedTabControl.xaml" />
+                <ResourceDictionary Source="/Resources/Icons.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+    <metro:MetroWindow.WindowCommands>
+        <metro:WindowCommands>
+            <Button ToolTip="Settings" Command="{Binding SettingsCommand}" IsTabStop="False">
+                <StackPanel Orientation="Horizontal">
+                    <Rectangle Width="20" Height="20">
+                        <Rectangle.Fill>
+                            <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_settings}" />
+                        </Rectangle.Fill>
+                    </Rectangle>
+                </StackPanel>
+            </Button>
+        </metro:WindowCommands>
+    </metro:MetroWindow.WindowCommands>
+    
+    <Grid>
+
+        <metro:TransitioningContentControl Content="{Binding SelectedHeader}" FontSize="50" Width="435" 
+                                           Height="75" VerticalAlignment="Top" HorizontalAlignment="Left"                                           
+                                           FontFamily="Segoe UI Light, Lucida Sans Unicode, Verdana" Transition="{Binding TransitionDirection}"
+                                           FontWeight="Black" Opacity="0.2" Margin="0, -15, 0, 0" />
+        
+        <TabControl x:Name="tabControl" ItemsSource="{Binding Tabs}" IsTabStop="False" Margin="0, 40, 0, 0"
+                    SelectedItem="{Binding SelechedHeader, Mode=OneWayToSource}"
+                    
+                    SelectedIndex="{Binding SelectedIndex, Mode=OneWayToSource}">
+            <TabControl.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Header}" />
+                </DataTemplate>
+            </TabControl.ItemTemplate>
+            <TabControl.ContentTemplate>
+                <DataTemplate>
+                    <ContentControl Content="{Binding Content}" IsTabStop="False" />
+                </DataTemplate>
+            </TabControl.ContentTemplate>
+        </TabControl>
+        
+
+
+    </Grid>
+</metro:MetroWindow>

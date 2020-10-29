@@ -1,0 +1,135 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    >
+
+    <Color x:Key="HighlightDarkColor">#FF404E5F</Color>
+    <Color x:Key="HighlightLightColor">#FF404E5F</Color>
+
+    <Color x:Key="BlackColor">#FF000000</Color>
+    <Color x:Key="WhiteColor">#FFFFFFFF</Color>
+
+    <Color x:Key="NormalForegroundColor">#FFFFFFFF</Color>
+    <Color x:Key="HoverForegroundColor">#FF000000</Color>
+
+    <Color x:Key="GrayNormal">#FF7D7D7D</Color>
+    <Color x:Key="GrayHover">#FFAAAAAA</Color>
+    <!--
+    <Color x:Key="GraySelected">#FF606060</Color>
+    -->
+    <Color x:Key="GraySelected">#FF546273</Color>
+    
+    <Color x:Key="AccentColor">#FF546273</Color>    
+    <Color x:Key="AccentColor2">#CC546273</Color>
+    <Color x:Key="AccentColor3">#99546273</Color>
+    <Color x:Key="AccentColor4">#66546273</Color>
+
+    <SolidColorBrush x:Key="AccentColorBrush"
+                     Color="{DynamicResource AccentColor}" />
+
+    <Color x:Key="ControlBackgroundColor">#FFEFEFF2</Color>
+    <Color x:Key="ControlForegroundColor">#FF000000</Color>
+    <Color x:Key="ControlsBackgroundColor">#FFEFEFF2</Color>
+    
+    <SolidColorBrush x:Key="ControlsBackgroundBrush" Color="{DynamicResource ControlsBackgroundColor}" />    
+    
+    <Style TargetType="TabItem" >
+        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+        <Setter Property="IsTabStop" Value="False" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="Padding" Value="6,2,6,2" />
+        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        <Setter Property="VerticalContentAlignment" Value="Stretch" />
+        <Setter Property="MinWidth" Value="5" />
+        <Setter Property="MinHeight" Value="5" />
+        <Setter Property="FontSize" Value="26.67" />
+        <Setter Property="FontFamily" Value="Segoe UI, Lucida Sans Unicode, Verdana" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="TabItem">
+                    <Label x:Name="root" FontSize="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=FontSize}" FontWeight="Light">
+                        <ContentPresenter ContentSource="Header"  RecognizesAccessKey="True" />
+                    </Label>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsSelected" Value="true">
+                            <Setter TargetName="root" Property="Foreground">
+                                <Setter.Value>
+                                    <SolidColorBrush Color="{DynamicResource GraySelected}" />
+                                </Setter.Value>
+                            </Setter>
+                            <Setter TargetName="root" Property="FontWeight" Value="Medium" />
+                        </Trigger>
+
+                        <Trigger Property="IsSelected" Value="false">
+                            <Setter  TargetName="root" Property="Foreground">
+                                <Setter.Value>
+                                    <SolidColorBrush Color="{DynamicResource GrayNormal}" />
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                        <Trigger SourceName="root" Property="IsMouseOver" Value="True">
+                            <Setter  TargetName="root" Property="Foreground">
+                                <Setter.Value>
+                                    <SolidColorBrush Color="{DynamicResource GrayHover}" />
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="{x:Type ListBoxItem}">
+        <Setter Property="MinHeight" Value="25" />
+        <Setter Property="Margin" Value="0" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                    <Border x:Name="Border"
+                            Background="{TemplateBinding Background}"
+                            SnapsToDevicePixels="True">
+                        <ContentPresenter Margin="5, 0, 0, 0"
+                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter TargetName="Border" Property="Background" Value="{DynamicResource AccentColorBrush}" />
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Border" Property="Background">
+                                <Setter.Value>
+                                    <SolidColorBrush Color="{DynamicResource AccentColor3}" />
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Foreground" Value="{DynamicResource GrayBrush5}" />
+                        </Trigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsEnabled" Value="False" />
+                                <Condition Property="IsSelected" Value="True" />
+                            </MultiTrigger.Conditions>
+                            <MultiTrigger.Setters>
+                                <Setter TargetName="Border" Property="Background" Value="{DynamicResource GrayBrush5}" />
+                                <Setter Property="Foreground" Value="{DynamicResource WhiteBrush}" />
+                            </MultiTrigger.Setters>
+                        </MultiTrigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsSelected" Value="True" />
+                                <Condition Property="Selector.IsSelectionActive" Value="True" />
+                            </MultiTrigger.Conditions>
+                            <Setter TargetName="Border" Property="Background">
+                                <Setter.Value>
+                                    <SolidColorBrush Color="{DynamicResource AccentColor2}" />
+                                </Setter.Value>
+                            </Setter>
+                        </MultiTrigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+</ResourceDictionary>
